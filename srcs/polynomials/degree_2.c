@@ -27,6 +27,8 @@ int		degree_two(t_ast_chain *ast)
 		int real = -b;
 		int imag = (int)sqrt(-det);
 
+		printf("Discriminant is strictly negative, the two complex solutions are:\n");
+
 		// simplify
 		int gcd = 1;
 		for (int i = 1; i <= abs(div); i++) {
