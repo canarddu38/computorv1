@@ -3,14 +3,15 @@
 
 #include "stdio.h"
 #include "unistd.h"
+#include "stdlib.h"
 
-static inline void	log(const char *str, ...)
+static inline void	log(int n, const char *str, ...)
 {
 	va_list l;
 
 	va_start(l, str);
 	fprintf(stderr, "\033[31mERROR\033[0m: %s", str);
-	while (1)
+	for (int i=1; i<n; i++)
 	{
 		char *s = va_arg(l, char *);
 		if (!s)

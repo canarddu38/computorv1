@@ -12,11 +12,11 @@ $(NAME): $(O_FILES)
 	$(CC) $(C_FLAGS) $^ -o $@
 
 $(OBJ_DIR)/%.o: $(SRCS_DIR)/%.c
-	@mkdir -p $(OBJ_DIR)
+	@mkdir -p "$(shell dirname "$@")"
 	$(CC) $(C_FLAGS) -c $^ -o $@
 
 clean:
-	rm -rf $(O_FILES)
+	rm -rf $(OBJ_DIR)
 
 fclean: clean
 	rm -rf $(NAME)
