@@ -14,11 +14,9 @@ int	resolve(char *equation)
 		return 1;
 	
 	simplify_equation(&ast, &degree);
-
-	//for (t_ast_chain *cur = ast; cur; cur = cur->next)
-	//	printf("%f * X^%i\n", cur->a, cur->x.exp_p);
-
 	resolve_polynomial(ast, degree);
+	
+	cleanup_ast_chain(&ast);
 	return 0;
 }
 

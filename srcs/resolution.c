@@ -11,6 +11,14 @@ int	resolve_polynomial(t_ast_chain *ast, int degree)
 	t_ast_chain *current = ast;
 	int max_handled_degree = sizeof(resolution_table) / sizeof(resolution_table[0]);
 
+	// k = k style equation
+	if (!ast)
+	{
+		printf("Reduced form: K * X^0 = K * X^0\n");
+		printf("Any real number is a solution.\n");
+		return 0;
+	}
+
 	// add a const a=0 to equation if no const yet
 	if (ast->x.exp_p != 0) 
 	{
@@ -21,7 +29,7 @@ int	resolve_polynomial(t_ast_chain *ast, int degree)
 	printf("Reduced form: ");
 	while (current)
 	{
-		printf("%g * X^%d", current->a, current->x.exp_p);
+		printf("%g * X^%d", (current->a < 0)?-current->a:current->a, current->x.exp_p);
 		if (current->next && current->next->a >= 0)
 			printf(" + ");
 		else if (current->next && current->next->a < 0)
