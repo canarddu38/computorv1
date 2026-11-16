@@ -2,46 +2,46 @@
 #include "ast.h"
 #include "resolution.h"
 
+int	resolve(char *equation)
+{
+	int 		degree = 0;
+	t_ast_chain	*ast = calloc(1, sizeof(t_ast_chain));
+	if (!ast)
+		return 1;
+
+	// process polynomial equation
+	if (parse_polynomial(equation, ast) == false)
+		return 1;
+	
+	simplify_equation(&ast, &degree);
+
+	//for (t_ast_chain *cur = ast; cur; cur = cur->next)
+	//	printf("%f * X^%i\n", cur->a, cur->x.exp_p);
+
+	resolve_polynomial(ast, degree);
+	return 0;
+}
+
 int	main(int argc, char **argv)
 {
-	int			degree = 0;
+	char	stdin_buf[4096];
 
 	if (argc == 1)
 	{
-		char stdin_buf[4096];
-		if (read(0, stdin_buf, 4096) <= 0)
+		size_t read_size = read(0, stdin_buf, 4096);
+		if (read_size <= 0)
 		{
 			log(0, "Could not read stdin, closing...");
 			return 1;
 		}
 
-		// TODO: stdin
-		t_ast_chain *ast = calloc(1, sizeof(t_ast_chain));
-		if (!ast)
-			return 1;
-
-		// process polynomial equation
-		if (parse_polynomial(stdin_buf, ast) == false)
-			return 1;
+		while (stdin_buf[read_size - 1] == '\n' && read_size > 0)
+			stdin_buf[read_size-- - 1] = '\0';
 		
-		simplify_equation(ast, &degree);
-		resolve_polynomial(ast, degree);
-		return 0;
+		return resolve(stdin_buf);
 	}
 	else if (argc == 2)
-	{
-		t_ast_chain *ast = calloc(1, sizeof(t_ast_chain));
-		if (!ast)
-			return 1;
-
-		// process polynomial equation
-		if (parse_polynomial(argv[1], ast) == false)
-			return 1;
-		
-		simplify_equation(ast, &degree);
-		resolve_polynomial(ast, degree);
-		return 0;
-	}
+		return resolve(argv[1]);
 	else
 	{
 		log(3, "Usage: ", argv[0], " \"5 * X^1 - 9 * X^2 = 1 * X^1\"");

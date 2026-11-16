@@ -43,6 +43,6 @@ static inline void	cleanup_ast_chain(t_ast_chain **lst)
 }
 
 int		parse_polynomial(char *equation_str, t_ast_chain *ast);
-void	simplify_equation(t_ast_chain *ast, int *degree);
+void	simplify_equation(t_ast_chain **ast, int *degree);
 
 #endif

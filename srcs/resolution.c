@@ -22,12 +22,13 @@ int	resolve_polynomial(t_ast_chain *ast, int degree)
 	while (current)
 	{
 		printf("%g * X^%d", current->a, current->x.exp_p);
-		if (current->next)
-		{
+		if (current->next && current->next->a >= 0)
 			printf(" + ");
-		}
+		else if (current->next && current->next->a < 0)
+			printf(" - ");
 		current = current->next;
 	}
+	
 	printf(" = 0\n");
 	if (degree > 0)
 		printf("Polynomial degree: %d\n", degree);

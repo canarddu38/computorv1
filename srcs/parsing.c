@@ -130,7 +130,7 @@ error:
 	return false;
 }
 
-void	simplify_equation(t_ast_chain *ast, int *degree)
+void	simplify_equation(t_ast_chain **ast, int *degree)
 {
 	t_ast_chain	*current;
 	t_ast_chain	*cmp;
@@ -139,7 +139,7 @@ void	simplify_equation(t_ast_chain *ast, int *degree)
 	t_ast_chain	*next;
 
 	// simplify
-	current = ast;
+	current = *ast;
 	*degree = 0;
 	while (current)
 	{
@@ -164,9 +164,28 @@ void	simplify_equation(t_ast_chain *ast, int *degree)
 		current = current->next;
 	}
 
+	// remove zero coefficients
+	current = *ast;
+	prev = NULL;
+	while (current)
+	{
+		next = current->next;
+		if (current->a == 0)
+		{
+			if (prev)
+				prev->next = next;
+			else
+				*ast = next;
+			free(current);
+		}
+		else
+			prev = current;
+		current = next;
+	}
+
 	// sort
 	sorted = NULL;
-	current = ast;
+	current = *ast;
 	while (current)
 	{
 		next = current->next;
@@ -187,6 +206,5 @@ void	simplify_equation(t_ast_chain *ast, int *degree)
 		current = next;
 	}
 
-	// update original
-	ast = sorted;
+	*ast = sorted;
 }
